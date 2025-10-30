@@ -1,0 +1,14 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+  <defs>
+    <radialGradient id='peach' cx='32' cy='36' r='30' gradientUnits='userSpaceOnUse'>
+      <stop offset='0' stop-color='#ffd8c2'/>
+      <stop offset='0.6' stop-color='#ff9e73'/>
+      <stop offset='1' stop-color='#ff7f52'/>
+    </radialGradient>
+  </defs>
+  <path fill='url(#peach)' d='M32 12C22 2 4 16 6 34s14 28 26 28 24-10 26-28S42 2 32 12z'/>
+  <path fill='rgba(255,255,255,0.35)' d='M32 12c10-10 28 4 26 22-1 13-9 23-18 26 7-6 9-21-8-35z'/>
+  <path stroke='#704620' stroke-linecap='round' stroke-width='3' d='M32 12c0-4 6-6 12-4'/>
+  <path stroke='#537f3d' stroke-linecap='round' stroke-width='7' d='M29 10C23 8 18 4 18 1'/>
+  <path stroke='#426d30' stroke-linecap='round' stroke-width='7' d='M34 10c4-4 8-6 12-6'/>
+</svg>
