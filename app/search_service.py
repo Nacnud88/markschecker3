@@ -336,7 +336,10 @@ class SearchService:
             logger.warning("Fallback page lookup failed for '%s': %s", term, exc)
             return None
 
-        if response.status_code != 200:
+        if response.status_code == 404:
+            logger.debug("Fallback page lookup returned 404 for '%s'", term)
+            return None
+        if response.status_code >= 400:
             logger.debug(
                 "Fallback page lookup returned %s for '%s'",
                 response.status_code,
@@ -344,20 +347,36 @@ class SearchService:
             )
             return None
 
-        match = re.search(r"window.__INITIAL_STATE__=(\{.*?\})</script>", response.text)
+        match = re.search(
+            r"window\.__INITIAL_STATE__=(.*?);\s*</script>", response.text, re.DOTALL
+        )
         if not match:
             return None
 
         try:
-            state = json.loads(match.group(1))
+            decoder = json.JSONDecoder()
+            state, _ = decoder.raw_decode(match.group(1).strip())
         except json.JSONDecodeError:
             logger.debug("Failed to parse fallback JSON for '%s'", term)
             return None
 
-        entities = state.get("entities", {}).get("product")
+        entities = (
+            state.get("data", {})
+            .get("products", {})
+            .get("productEntities")
+        )
         if not isinstance(entities, dict):
             return None
-        return {"entities": {"product": entities}}
+
+        normalised = {
+            str(key): value
+            for key, value in entities.items()
+            if isinstance(value, dict)
+        }
+        if not normalised:
+            return None
+
+        return {"entities": {"product": normalised}}
 
     def _fallback_product_payload(self, text: str) -> Optional[Dict]:
         products: Dict[str, Dict] = {}
