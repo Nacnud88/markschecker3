@@ -1,0 +1,24 @@
+{
+  "name": "Marks Checker 3",
+  "short_name": "MarksChecker",
+  "icons": [
+    {
+      "src": "/static/favicon/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/favicon/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/favicon/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#00483b",
+  "background_color": "#f8f9fa",
+  "display": "standalone"
+}

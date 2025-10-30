@@ -137,6 +137,18 @@ def store_products(
         )
 
 
+def delete_session(db_path: Path, session_id: str) -> None:
+    with get_connection(db_path) as conn:
+        conn.execute(
+            "DELETE FROM products WHERE session_id = ?",
+            (session_id,),
+        )
+        conn.execute(
+            "DELETE FROM sessions WHERE id = ?",
+            (session_id,),
+        )
+
+
 def fetch_session(db_path: Path, session_id: str) -> Optional[Dict]:
     with get_connection(db_path) as conn:
         cur = conn.execute(
