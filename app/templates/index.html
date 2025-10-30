@@ -357,17 +357,40 @@
                         originalEl.textContent = "";
                     }
 
+                    const metaFields = [];
+                    if (product.productId) metaFields.push(product.productId);
+                    if (product.retailerProductId && product.retailerProductId !== product.productId) {
+                        metaFields.push(product.retailerProductId);
+                    }
+                    metaFields.push(product.searchTerm);
+
                     const unitEl = clone.querySelector(".product-unit");
                     if (product.unitPrice && product.unitLabel) {
-                        unitEl.textContent = `${product.unitLabel}: $${product.unitPrice}`;
+                        const unitLabel = product.unitLabel.replace('fop.price.per.', '').replace(/\./g, ' ');
+                        unitEl.textContent = `Unit price: $${product.unitPrice} per ${unitLabel}`;
+                        metaFields.push(`Unit: $${product.unitPrice} / ${unitLabel}`);
                     } else {
                         unitEl.textContent = "";
                     }
 
-                    clone.querySelector(".product-meta").textContent = [
-                        product.productId || product.retailerProductId,
-                        product.searchTerm
-                    ].filter(Boolean).join(" • ");
+                    if (product.currency) {
+                        metaFields.push(`Currency: ${product.currency}`);
+                    }
+
+                    if (Array.isArray(product.category) && product.category.length) {
+                        metaFields.push(product.category.join(" > "));
+                    }
+
+                    if (Array.isArray(product.offers) && product.offers.length) {
+                        const offerDescriptions = product.offers
+                            .map((offer) => offer.description || offer.longDescription)
+                            .filter(Boolean);
+                        if (offerDescriptions.length) {
+                            metaFields.push(`Offers: ${offerDescriptions.join("; ")}`);
+                        }
+                    }
+
+                    clone.querySelector(".product-meta").textContent = metaFields.filter(Boolean).join(" • ");
                 } else {
                     state.totals.missing += 1;
                     clone.querySelector(".missing-reason").textContent = product.notFoundMessage || "No additional information.";
